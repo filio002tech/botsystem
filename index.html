@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patrick Medical Clinic | Health Portal & AI Analytics</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #0a3663;
+            --light-bg: #f8f9fa;
+            --text-color: #212529;
+            --border-color: #e0e6ed;
+            --success-color: #198754;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Navigation Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .brand {
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-contact {
+            font-size: 0.9rem;
+            text-align: right;
+        }
+
+        /* Container Layout */
+        .container {
+            max-width: 1200px;
+            margin: 25px auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 6px solid var(--primary-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .hero h1 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        /* Grid Cards for Services */
+        .section-title {
+            font-size: 1.4rem;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(13, 110, 253, 0.15);
+        }
+
+        .service-card i {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        /* Main Split Content: Booking & Direct Embed */
+        .main-split {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .btn-submit:hover {
+            background-color: #0b5ed7;
+        }
+
+        /* Analytics & Data Dashboard Section */
+        .analytics-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+            margin-bottom: 40px;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .chart-box {
+            position: relative;
+            padding: 15px;
+            background: #fafafa;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Data Table Styling */
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        table th, table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table th {
+            background-color: #f1f5f9;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-danger { background-color: #f8d7da; color: var(--danger-color); }
+        .badge-warning { background-color: #fff3cd; color: #856404; }
+        .badge-success { background-color: #d1e7dd; color: var(--success-color); }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #ffffff;
+            color: #6c757d;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            .header-contact { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            <i class="fa-solid fa-hospital"></i>
+            <span>Patrick Medical Clinic</span>
+        </div>
+        <div class="header-contact">
+            <div><i class="fa-solid fa-phone-volume"></i> Emergency: <strong>+1 (800) 555-0199</strong></div>
+            <div><i class="fa-solid fa-location-dot"></i> Health City Center</div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div class="hero">
+            <h1>Compassionate Care, Advanced Virtual Triage</h1>
+            <p>Welcome to <strong>Patrick Medical Clinic</strong>. Use our online portal to consult our AI Virtual Assistant, schedule appointments, and review clinical engagement telemetry.</p>
+        </div>
+
+        <h2 class="section-title"><i class="fa-solid fa-stethoscope"></i> Clinical Specialties</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fa-solid fa-user-doctor"></i>
+                <h3>General Medicine</h3>
+                <p>Preventative health checks, routine consultations, and continuous care.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-heart-pulse"></i>
+                <h3>Cardiology</h3>
+                <p>ECG monitoring, hypertension tracking, and cardiac risk assessments.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-baby"></i>
+                <h3>Pediatrics</h3>
+                <p>Child health, newborn evaluations, and immunizations.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-vials"></i>
+                <h3>Diagnostics & Lab</h3>
+                <p>Rapid automated blood work, pathology, and diagnostic imaging.</p>
+            </div>
+        </div>
+
+        <div class="main-split">
+            <div class="card-box">
+                <h2 class="section-title"><i class="fa-solid fa-calendar-check"></i> Book an Appointment</h2>
+                <form id="appointmentForm" onsubmit="handleFormSubmit(event)">
+                    <div class="form-group">
+                        <label>Patient Name</label>
+                        <input type="text" placeholder="e.g. John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Email/Phone</label>
+                        <input type="text" placeholder="e.g. john@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Department</label>
+                        <select required>
+                            <option value="">Select Specialty</option>
+                            <option>General Medicine</option>
+                            <option>Cardiology</option>
+                            <option>Pediatrics</option>
+                            <option>Diagnostics</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred Date</label>
+                        <input type="date" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Submit Booking</button>
+                </form>
+                <div id="bookingAlert" style="display:none; margin-top:15px; padding:10px; background:#d1e7dd; color:#0f5132; border-radius:6px; font-size:0.85rem;">
+                    ✅ Booking request submitted successfully!
+                </div>
+            </div>
+
+            <div class="card-box">
+                <h2 class="section-title"><i class="fa-solid fa-robot"></i> Interactive AI Bot</h2>
+                <p style="font-size: 0.85rem; color: #6c757d; margin-bottom: 10px;">Chat with our assistant directly in the panel below or use the floating bubble at the bottom right.</p>
+                <iframe src="https://share.botstar.com/?id=s92613f98-9961-4df9-b8c2-025923786d8b" style="width:100%; height:380px; border:1px solid var(--border-color); border-radius:8px;" allow="microphone"></iframe>
+            </div>
+        </div>
+
+        <div class="analytics-section">
+            <h2 class="section-title"><i class="fa-solid fa-chart-line"></i> AI Chatbot Patient Telemetry & Analytics</h2>
+            <p style="font-size: 0.9rem; color: #6c757d;">Statistical reporting suite analyzing triage levels, symptom prevalence, and patient satisfaction.</p>
+
+            <div class="charts-grid">
+                <div class="chart-box">
+                    <h4 style="text-align: center; margin-bottom: 10px;">🚨 Triage Urgency Distribution</h4>
+                    <canvas id="triageChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h4 style="text-align: center; margin-bottom: 10px;">🩺 Common Patient Symptoms</h4>
+                    <canvas id="symptomChart"></canvas>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px;" class="section-title"><i class="fa-solid fa-list-check"></i> Patient Interaction Audit Log</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Patient ID</th>
+                            <th>Name</th>
+                            <th>Symptom</th>
+                            <th>Triage Risk</th>
+                            <th>Bot Duration</th>
+                            <th>Satisfaction</th>
+                            <th>Outcome</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>PMC-1001</td>
+                            <td>David Okon</td>
+                            <td>Chest Tightness</td>
+                            <td><span class="badge badge-danger">Emergency</span></td>
+                            <td>3.5 mins</td>
+                            <td>⭐⭐⭐⭐⭐ (5/5)</td>
+                            <td>Escalated to ER</td>
+                        </tr>
+                        <tr>
+                            <td>PMC-1002</td>
+                            <td>Grace Eke</td>
+                            <td>Fever & Chills</td>
+                            <td><span class="badge badge-warning">Urgent</span></td>
+                            <td>4.1 mins</td>
+                            <td>⭐⭐⭐⭐ (4/5)</td>
+                            <td>Doctor Appt Booked</td>
+                        </tr>
+                        <tr>
+                            <td>PMC-1003</td>
+                            <td>Michael Ade</td>
+                            <td>Eye Redness</td>
+                            <td><span class="badge badge-success">Routine</span></td>
+                            <td>2.0 mins</td>
+                            <td>⭐⭐⭐⭐⭐ (5/5)</td>
+                            <td>Self-Care Advice Offered</td>
+                        </tr>
+                        <tr>
+                            <td>PMC-1004</td>
+                            <td>Aisha Bello</td>
+                            <td>High Blood Pressure</td>
+                            <td><span class="badge badge-warning">Urgent</span></td>
+                            <td>5.2 mins</td>
+                            <td>⭐⭐⭐⭐ (4/5)</td>
+                            <td>Teleconsult Scheduled</td>
+                        </tr>
+                        <tr>
+                            <td>PMC-1005</td>
+                            <td>Sarah Johnson</td>
+                            <td>Shortness of Breath</td>
+                            <td><span class="badge badge-danger">Emergency</span></td>
+                            <td>2.8 mins</td>
+                            <td>⭐⭐⭐⭐⭐ (5/5)</td>
+                            <td>Ambulance Dispatched</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 2026 <strong>Patrick Medical Clinic</strong>. All rights reserved. | Healthcare Virtual Assistant Integration</p>
+    </footer>
+
+    <script>
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            document.getElementById('bookingAlert').style.display = 'block';
+            document.getElementById('appointmentForm').reset();
+        }
+
+        // Initialize Chart 1: Triage Distribution (Pie)
+        const ctx1 = document.getElementById('triageChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+                labels: ['Emergency', 'Urgent', 'Routine'],
+                datasets: [{
+                    data: [2, 2, 1],
+                    backgroundColor: ['#dc3545', '#ffc107', '#198754']
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
+
+        // Initialize Chart 2: Symptoms Bar Chart
+        const ctx2 = document.getElementById('symptomChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Chest Tightness', 'Fever', 'High BP', 'Shortness of Breath', 'Eye Redness'],
+                datasets: [{
+                    label: 'Cases Logged',
+                    data: [1, 1, 1, 1, 1],
+                    backgroundColor: '#0d6efd'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+            }
+        });
+    </script>
+
+    <script>var BotStar={appId:"s92613f98-9961-4df9-b8c2-025923786d8b",mode:"livechat"};!function(t,a){var e=function(){(e.q=e.q||[]).push(arguments)};e.q=e.q||[],t.BotStarApi=e;!function(){var t=a.createElement("script");t.type="text/javascript",t.async=1,t.src="https://widget.botstar.com/static/js/widget.js";var e=a.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)}();}(window,document)</script>
+
+</body>
+</html>
